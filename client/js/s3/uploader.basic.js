@@ -87,7 +87,7 @@
 
             callbacks: {
                 onCredentialsExpired: function() {},
-                onSigningRequestComplete: function(response, success, xhrOrXdr) {}
+                onSigningRequestComplete: function(response, success, xhrOrXdr) {return response;}
             }
         };
 
@@ -165,7 +165,7 @@
 
                 credentials.accessKey !== undefined && (this._currentCredentials.accessKey = credentials.accessKey);
                 credentials.secretKey !== undefined && (this._currentCredentials.secretKey = credentials.secretKey);
-                credentials.expiration !== undefined && (this._currentCredentials.expiration = credentials.expiration);
+                credentials.expiration !== undefined && qq.isString(this._currentCredentials.expiration = credentials.expiration) && (this._currentCredentials.expiration = new Date(this._currentCredentials.expiration));
                 credentials.sessionToken !== undefined && (this._currentCredentials.sessionToken = credentials.sessionToken);
 
                 return Boolean(this._currentCredentials.accessKey);
