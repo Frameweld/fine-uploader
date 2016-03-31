@@ -159,17 +159,18 @@
 
         setCredentials: function(credentials, ignoreEmpty) {
             if (credentials && ignoreEmpty) {
-                    if(this._currentCredentials === undefined){
-                        this._currentCredentials = {};
-                    }
+                if (this._currentCredentials === undefined) {
+                    this._currentCredentials = {};
+                }
 
-                    credentials['accessKey'] !== undefined && (this._currentCredentials['accessKey'] = credentials['accessKey']);
-                    credentials['secretKey'] !== undefined && (this._currentCredentials['secretKey'] = credentials['secretKey']);
-                    credentials['expiration'] !== undefined && (this._currentCredentials['expiration'] = credentials['expiration']);
-                    credentials['sessionToken'] !== undefined && (this._currentCredentials['sessionToken'] = credentials['sessionToken']);
+                credentials.accessKey !== undefined && (this._currentCredentials.accessKey = credentials.accessKey);
+                credentials.secretKey !== undefined && (this._currentCredentials.secretKey = credentials.secretKey);
+                credentials.expiration !== undefined && (this._currentCredentials.expiration = credentials.expiration);
+                credentials.sessionToken !== undefined && (this._currentCredentials.sessionToken = credentials.sessionToken);
 
-                    return Boolean(this._currentCredentials['accessKey']);
-            }else if (credentials && credentials.secretKey){
+                return Boolean(this._currentCredentials.accessKey);
+            }
+			else if (credentials && credentials.secretKey) {
                 if (!credentials.accessKey) {
                     throw new qq.Error("Invalid credentials: no accessKey");
                 }
