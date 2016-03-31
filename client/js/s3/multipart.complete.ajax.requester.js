@@ -31,6 +31,7 @@ qq.s3.CompleteMultipartAjaxRequester = function(o) {
         endpointStore: options.endpointStore,
         signatureSpec: options.signatureSpec,
         cors: options.cors,
+        onSigningRequestComplete: options.onSigningRequestComplete,
         log: options.log
     });
 

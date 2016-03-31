@@ -29,6 +29,7 @@ qq.s3.AbortMultipartAjaxRequester = function(o) {
         endpointStore: options.endpointStore,
         signatureSpec: options.signatureSpec,
         cors: options.cors,
+        onSigningRequestComplete: options.onSigningRequestComplete,
         log: options.log
     });
 

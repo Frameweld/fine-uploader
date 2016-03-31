@@ -192,6 +192,7 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
                 signatureSpec: signature,
                 cors: spec.cors,
                 log: log,
+                onSigningRequestComplete: spec.onSigningRequestComplete,
                 getBucket: function(id) {
                     return upload.bucket.getName(id);
                 },
@@ -208,6 +209,7 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
                 signatureSpec: signature,
                 cors: spec.cors,
                 log: log,
+                onSigningRequestComplete: spec.onSigningRequestComplete,
                 getBucket: function(id) {
                     return upload.bucket.getName(id);
                 },
@@ -229,6 +231,7 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
                 serverSideEncryption: serverSideEncryption,
                 cors: spec.cors,
                 log: log,
+                onSigningRequestComplete: spec.onSigningRequestComplete,
                 getContentType: function(id) {
                     return handler._getMimeType(id);
                 },
@@ -250,14 +253,16 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
                 expectingPolicy: true,
                 signatureSpec: signature,
                 cors: spec.cors,
-                log: log
+                log: log,
+                onSigningRequestComplete: spec.onSigningRequestComplete
             }),
 
             restSignature: new qq.s3.RequestSigner({
                 endpointStore: endpointStore,
                 signatureSpec: signature,
                 cors: spec.cors,
-                log: log
+                log: log,
+                onSigningRequestComplete: spec.onSigningRequestComplete
             })
         },
 
