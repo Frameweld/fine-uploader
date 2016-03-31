@@ -32,7 +32,8 @@ qq.s3.FormUploadHandler = function(options, proxy) {
         getSignatureAjaxRequester = new qq.s3.RequestSigner({
             signatureSpec: signature,
             cors: options.cors,
-            log: log
+            log: log,
+            onSigningRequestComplete: options.onSigningRequestComplete
         });
 
     if (successRedirectUrl === undefined) {

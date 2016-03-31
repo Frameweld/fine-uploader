@@ -86,7 +86,8 @@
             },
 
             callbacks: {
-                onCredentialsExpired: function() {}
+                onCredentialsExpired: function() {},
+                onSigningRequestComplete: function(response, success, xhrOrXdr) {}
             }
         };
 
@@ -157,7 +158,18 @@
         },
 
         setCredentials: function(credentials, ignoreEmpty) {
-            if (credentials && credentials.secretKey) {
+            if (credentials && ignoreEmpty) {
+                    if(this._currentCredentials === undefined){
+                        this._currentCredentials = {};
+                    }
+
+                    credentials['accessKey'] !== undefined && (this._currentCredentials['accessKey'] = credentials['accessKey']);
+                    credentials['secretKey'] !== undefined && (this._currentCredentials['secretKey'] = credentials['secretKey']);
+                    credentials['expiration'] !== undefined && (this._currentCredentials['expiration'] = credentials['expiration']);
+                    credentials['sessionToken'] !== undefined && (this._currentCredentials['sessionToken'] = credentials['sessionToken']);
+
+                    return Boolean(this._currentCredentials['accessKey']);
+            }else if (credentials && credentials.secretKey){
                 if (!credentials.accessKey) {
                     throw new qq.Error("Invalid credentials: no accessKey");
                 }
@@ -209,7 +221,8 @@
                     validation: {
                         minSizeLimit: this._options.validation.minSizeLimit,
                         maxSizeLimit: this._options.validation.sizeLimit
-                    }
+                    },
+                    onSigningRequestComplete: qq.bind(this._options.callbacks.onSigningRequestComplete, this)
                 };
 
             // We assume HTTP if it is missing from the start of the endpoint string.
