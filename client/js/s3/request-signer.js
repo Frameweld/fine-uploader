@@ -318,7 +318,7 @@ qq.s3.RequestSigner = function(o) {
             generateHeaders(signatureConstructor, response.signature, promise);
         }
         else {
-            if (oldCredentials.accessKey !== credentialsProvider.get().accessKey || oldCredentials.sessionToekn !== credentialsProvider.get().sessionToken) {
+            if (oldCredentials.accessKey !== credentialsProvider.get().accessKey || oldCredentials.sessionToken !== credentialsProvider.get().sessionToken) {
                 options.log("Amazon credentials changed after onSigningRequestComplete event callback");
                 promise.success(response, credentialsProvider.get().accessKey, credentialsProvider.get().sessionToken);
             }
