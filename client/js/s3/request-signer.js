@@ -46,12 +46,14 @@ qq.s3.RequestSigner = function(o) {
         },
         credentialsProvider,
 
-        generateHeaders = function(signatureConstructor, signature, promise) {
+        generateHeaders = function(signatureConstructor, signature, promise, credentials) {
+            credentials || (credentials = options.signatureSpec.credentialsProvider.get());
+
             var headers = signatureConstructor.getHeaders();
 
             if (options.signatureSpec.version === 4) {
                 headers.Authorization = qq.s3.util.V4_ALGORITHM_PARAM_VALUE +
-                    " Credential=" + options.signatureSpec.credentialsProvider.get().accessKey + "/" +
+                    " Credential=" + credentials.accessKey + "/" +
                     qq.s3.util.getCredentialsDate(signatureConstructor.getRequestDate()) + "/" +
                     options.signatureSpec.region + "/" +
                     "s3/aws4_request," +
@@ -59,7 +61,7 @@ qq.s3.RequestSigner = function(o) {
                     "Signature=" + signature;
             }
             else {
-                headers.Authorization = "AWS " + options.signatureSpec.credentialsProvider.get().accessKey + ":" + signature;
+                headers.Authorization = "AWS " + credentials.accessKey + ":" + signature;
             }
 
             promise.success(headers, signatureConstructor.getEndOfUrl());
@@ -266,7 +268,8 @@ qq.s3.RequestSigner = function(o) {
             promise = pendingSignatureData.promise,
             signatureConstructor = pendingSignatureData.signatureConstructor,
             oldCredentials = Object.assign({}, credentialsProvider.get()),
-            errorMessage, response;
+            tempCredentials = {},
+            credentials, errorMessage, response;
 
         delete pendingSignatures[id];
 
@@ -303,7 +306,13 @@ qq.s3.RequestSigner = function(o) {
             errorMessage = "Received an empty or invalid response from the server!";
         }
 
-        response = options.onSigningRequestComplete(response, !isError, xhrOrXdr);
+        response = options.onSigningRequestComplete(response, !isError, xhrOrXdr, tempCredentials);
+
+        if (tempCredentials && Object.keys(tempCredentials).length !== 0) {
+            credentials = tempCredentials;
+        } else {
+            credentials = credentialsProvider.get();
+        }
 
         isError = isError || (!response) && Boolean(errorMessage = "onSigningRequestComplete event callback returned false");
 
@@ -315,12 +324,17 @@ qq.s3.RequestSigner = function(o) {
             promise.failure(errorMessage);
         }
         else if (signatureConstructor) {
-            generateHeaders(signatureConstructor, response.signature, promise);
+            if (oldCredentials.accessKey !== credentials.accessKey || oldCredentials.sessionToken !== credentials.sessionToken) {
+                options.log("Amazon credentials changed after onSigningRequestComplete event callback");
+                generateHeaders(signatureConstructor, response.signature, promise, credentials);
+            } else {
+                generateHeaders(signatureConstructor, response.signature, promise);
+            }
         }
         else {
-            if (oldCredentials.accessKey !== credentialsProvider.get().accessKey || oldCredentials.sessionToken !== credentialsProvider.get().sessionToken) {
+            if (oldCredentials.accessKey !== credentials.accessKey || oldCredentials.sessionToken !== credentials.sessionToken) {
                 options.log("Amazon credentials changed after onSigningRequestComplete event callback");
-                promise.success(response, credentialsProvider.get().accessKey, credentialsProvider.get().sessionToken);
+                promise.success(response, credentials.accessKey, credentials.sessionToken);
             }
             else {
                 promise.success(response);
