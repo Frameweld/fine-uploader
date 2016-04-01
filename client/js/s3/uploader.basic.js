@@ -87,7 +87,7 @@
 
             callbacks: {
                 onCredentialsExpired: function() {},
-                onSigningRequestComplete: function(response, success, xhrOrXdr) {return response;}
+                onSigningRequestComplete: function(response, success, xhrOrXdr, tempCredentials) {return response;}
             }
         };
 
