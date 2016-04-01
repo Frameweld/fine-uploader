@@ -265,7 +265,7 @@ qq.s3.RequestSigner = function(o) {
             pendingSignatureData = pendingSignatures[id],
             promise = pendingSignatureData.promise,
             signatureConstructor = pendingSignatureData.signatureConstructor,
-			oldCredentials = Object.assign({}, credentialsProvider.get()),
+            oldCredentials = Object.assign({}, credentialsProvider.get()),
             errorMessage, response;
 
         delete pendingSignatures[id];
@@ -322,7 +322,7 @@ qq.s3.RequestSigner = function(o) {
                 options.log("Amazon credentials changed after onSigningRequestComplete event callback");
                 promise.success(response, credentialsProvider.get().accessKey, credentialsProvider.get().sessionToken);
             }
-			else {
+            else {
                 promise.success(response);
             }
         }
