@@ -170,7 +170,7 @@
 
                 return Boolean(this._currentCredentials.accessKey);
             }
-			else if (credentials && credentials.secretKey) {
+            else if (credentials && credentials.secretKey) {
                 if (!credentials.accessKey) {
                     throw new qq.Error("Invalid credentials: no accessKey");
                 }
