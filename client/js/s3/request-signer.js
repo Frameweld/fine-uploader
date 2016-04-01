@@ -309,6 +309,7 @@ qq.s3.RequestSigner = function(o) {
         response = options.onSigningRequestComplete(response, !isError, xhrOrXdr, tempCredentials);
 
         if (tempCredentials && Object.keys(tempCredentials).length !== 0) {
+            options.log("Temporary Amazon credentials found after onSigningRequestComplete event callback");
             credentials = tempCredentials;
         } else {
             credentials = credentialsProvider.get();
