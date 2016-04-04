@@ -62,6 +62,7 @@ qq.s3.RequestSigner = function(o) {
             }
             else {
                 headers.Authorization = "AWS " + credentials.accessKey + ":" + signature;
+                credentials.sessionToken && (headers["x-amz-security-token"] = credentials.sessionToken);
             }
 
             promise.success(headers, signatureConstructor.getEndOfUrl());
@@ -269,7 +270,7 @@ qq.s3.RequestSigner = function(o) {
             signatureConstructor = pendingSignatureData.signatureConstructor,
             oldCredentials = Object.assign({}, credentialsProvider.get()),
             tempCredentials = {},
-            credentials, errorMessage, response;
+            credentials, errorMessage, response, i;
 
         delete pendingSignatures[id];
 
@@ -308,7 +309,22 @@ qq.s3.RequestSigner = function(o) {
 
         response = options.onSigningRequestComplete(response, !isError, xhrOrXdr, tempCredentials);
 
-        if (tempCredentials && Object.keys(tempCredentials).length !== 0) {
+        if (tempCredentials) {
+            if (Object.keys) {
+                Object.keys(tempCredentials).length === 0 && (tempCredentials = null);
+            }
+            else {
+                /** this is for pre-ECMA 5 compatability */
+                for (i in tempCredentials) {
+                    if (tempCredentials.hasOwnProperty(i)) {
+                        tempCredentials = null;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (tempCredentials) {
             options.log("Temporary Amazon credentials found after onSigningRequestComplete event callback");
             credentials = tempCredentials;
         } else {
