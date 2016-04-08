@@ -274,12 +274,7 @@ qq.s3.RequestSigner = function(o) {
             promise = pendingSignatureData.promise,
             signatureConstructor = pendingSignatureData.signatureConstructor,
             credentials = credentialsProvider.get(),
-            oldCredentials = Object.assign ? Object.assign({}, credentials) : {
-                accessKey: credentials.accessKey,
-                secretKey: credentials.secretKey,
-                expiration: credentials.expiration,
-                sessionToken: credentials.sessionToken
-            },
+            oldCredentials = qq.extend({}, credentials),
             tempCredentials = {},
             errorMessage, response, i;
 
