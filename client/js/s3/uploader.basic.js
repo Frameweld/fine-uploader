@@ -87,7 +87,7 @@
 
             callbacks: {
                 onCredentialsExpired: function() {},
-                onSigningRequestComplete: function(response, success, xhrOrXdr) {return response;}
+                onSigningRequestComplete: function(response, success, xhrOrXdr, tempCredentials) {return response;}
             }
         };
 
@@ -163,10 +163,17 @@
                     this._currentCredentials = {};
                 }
 
-                credentials.accessKey !== undefined && (this._currentCredentials.accessKey = credentials.accessKey);
-                credentials.secretKey !== undefined && (this._currentCredentials.secretKey = credentials.secretKey);
-                credentials.expiration !== undefined && qq.isString(this._currentCredentials.expiration = credentials.expiration) && (this._currentCredentials.expiration = new Date(this._currentCredentials.expiration));
-                credentials.sessionToken !== undefined && (this._currentCredentials.sessionToken = credentials.sessionToken);
+                var fields = ["accessKey", "secretKey", "expiration", "sessionToken"], i;
+
+                for (i in fields) {
+                    if (credentials[fields[i]] !== undefined) {
+                        this._currentCredentials[fields[i]] = credentials[fields[i]];
+                    }
+                }
+
+                if (qq.isString(this._currentCredentials.expiration)) {
+                    this._currentCredentials.expiration = new Date(this._currentCredentials.expiration);
+                }
 
                 return Boolean(this._currentCredentials.accessKey);
             }
