@@ -90,8 +90,8 @@ if (qqtest.canDownloadFileAsBlob) {
                                 onUploadChunkSuccess: function(id, chunkData, response, xhr) {
                                     //should be called twice each (1 for each chunk)
                                     assert.equal(id, 0, "Wrong ID passed to onUploadChunkSuccess");
-                                    assert.ok(response, "Null response paassed to onUploadChunkSuccess");
-                                    assert.ok(xhr, "Null XHR paassed to onUploadChunkSuccess");
+                                    assert.ok(response, "Null response passed to onUploadChunkSuccess");
+                                    assert.ok(xhr, "Null XHR passed to onUploadChunkSuccess");
 
                                     verifyChunkData(true, chunkData);
                                 }
@@ -227,7 +227,7 @@ if (qqtest.canDownloadFileAsBlob) {
                                 assert.equal(uploader.getUploads()[0].status, qq.status.UPLOAD_SUCCESSFUL);
 
                                 done();
-                            },100);
+                            }, 100);
 
                         }, 100);
                     });
@@ -281,8 +281,8 @@ if (qqtest.canDownloadFileAsBlob) {
                             onUploadChunkSuccess: function(id, chunkData, response, xhr) {
                                 //should be called twice each (1 for each chunk)
                                 assert.equal(id, 0, "Wrong ID passed to onUploadChunkSuccess");
-                                assert.ok(response, "Null response paassed to onUploadChunkSuccess");
-                                assert.ok(xhr, "Null XHR paassed to onUploadChunkSuccess");
+                                assert.ok(response, "Null response passed to onUploadChunkSuccess");
+                                assert.ok(xhr, "Null XHR passed to onUploadChunkSuccess");
 
                                 verifyChunkData(true, chunkData);
                             }
@@ -541,7 +541,6 @@ if (qqtest.canDownloadFileAsBlob) {
                     uploader.retry(0);
                     assert.equal(uploader.getUploads()[0].status, qq.status.UPLOADING);
 
-
                     // successful initiate signature request
                     assert.equal(fileTestHelper.getRequests().length, 4);
                     initiateSignatureRequest = fileTestHelper.getRequests()[3];
@@ -679,7 +678,6 @@ if (qqtest.canDownloadFileAsBlob) {
                     assert.equal(fileTestHelper.getRequests().length, 20);
                     uploader.retry(0);
                     assert.equal(uploader.getUploads()[0].status, qq.status.UPLOADING);
-
 
                     // successful signature request for multipart complete
                     assert.equal(fileTestHelper.getRequests().length, 21);

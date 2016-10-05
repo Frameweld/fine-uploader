@@ -166,10 +166,10 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
                             uploadIdPromise.success(uploadId);
                             promise.success(uploadId);
                         },
-                        function(errorMsg) {
+                        function(errorMsg, xhr) {
                             handler._getPersistableData(id).uploadId = null;
-                            promise.failure(errorMsg);
-                            uploadIdPromise.failure(errorMsg);
+                            promise.failure(errorMsg, xhr);
+                            uploadIdPromise.failure(errorMsg, xhr);
                         }
                     );
                 }
@@ -270,7 +270,7 @@ qq.s3.XhrUploadHandler = function(spec, proxy) {
             /**
              * Used for simple (non-chunked) uploads to determine the parameters to send along with the request.  Part of this
              * process involves asking the local server to sign the request, so this function returns a promise.  The promise
-             * is fulfilled when all parameters are determined, or when we determine that all parameters cannnot be calculated
+             * is fulfilled when all parameters are determined, or when we determine that all parameters cannot be calculated
              * due to some error.
              *
              * @param id File ID
